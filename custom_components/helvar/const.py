@@ -4,6 +4,8 @@ DOMAIN = "helvar"
 
 CONF_HOST = "host"
 CONF_PORT = "port"
+CONF_CLUSTER_ID = "cluster_id"
+CONF_ROUTER_ID = "router_id"
 
 DEFAULT_PORT = 50000
 

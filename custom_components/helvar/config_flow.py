@@ -13,7 +13,15 @@ from homeassistant.data_entry_flow import FlowResult
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import config_validation as cv
 
-from .const import CONF_HOST, CONF_PORT, DEFAULT_PORT, DOMAIN
+from .const import (
+    CONF_CLUSTER_ID,
+    CONF_HOST,
+    CONF_PORT,
+    CONF_ROUTER_ID,
+    DEFAULT_PORT,
+    DOMAIN,
+)
+from .router import build_router
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -21,6 +29,13 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
     {
         vol.Required(CONF_HOST): cv.string,
         vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
+        # Optional: set these when the router isn't on a standard 10.254.C.R /
+        # 255.255.255.0 network (e.g. reached via a bridge), where deriving the
+        # HelvarNet cluster/router from the IP would be wrong.
+        vol.Optional(CONF_CLUSTER_ID): vol.All(
+            cv.positive_int, vol.Range(min=0, max=253)
+        ),
+        vol.Optional(CONF_ROUTER_ID): vol.All(cv.positive_int, vol.Range(min=1, max=254)),
     }
 )
 
@@ -44,7 +59,12 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
         Data has the keys from STEP_USER_DATA_SCHEMA with values provided by the user.
         """
-        router = aiohelvar.Router((data[CONF_HOST]), data[CONF_PORT])
+        router = build_router(
+            data[CONF_HOST],
+            data[CONF_PORT],
+            cluster_id=data.get(CONF_CLUSTER_ID),
+            router_id=data.get(CONF_ROUTER_ID),
+        )
 
         try:
             await router.connect()

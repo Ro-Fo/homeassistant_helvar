@@ -12,8 +12,13 @@
             "user": {
                 "data": {
                     "host": "Host",
-                    "password": "Password",
-                    "username": "Username"
+                    "port": "Port",
+                    "cluster_id": "Cluster ID (optional)",
+                    "router_id": "Router ID (optional)"
+                },
+                "data_description": {
+                    "cluster_id": "Leave blank to derive from the IP address. Set this only if the router isn't on a standard 10.254.C.R network (for example, reached via a bridge).",
+                    "router_id": "Leave blank to derive from the IP address. Set this together with Cluster ID."
                 }
             }
         }

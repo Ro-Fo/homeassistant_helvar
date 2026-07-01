@@ -24,7 +24,15 @@ You'll need to install HACS first, then set this up as a custom repository.
 
 ## Usage
 
-Enable the integration and you'll be prompted for your routers IP address and port. 
+Enable the integration and you'll be prompted for your router's IP address and port.
+
+Two optional fields are also available:
+
+- **Cluster ID** and **Router ID** — leave these blank on a normal setup, where
+  they're derived from the router's IP (3rd/4th octet of a `10.254.C.R`
+  address). Set them if your router is reached on an unrelated network (for
+  example via a bridge on a `192.168.x.y` address), where that derivation would
+  otherwise be wrong and device discovery would find nothing.
 
 The integration will then pull all lighting devices, groups and scenes. 
 
