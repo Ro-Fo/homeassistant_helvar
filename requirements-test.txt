@@ -3,5 +3,5 @@ pytest-asyncio>=0.21.0
 pytest-cov>=4.0.0
 pytest-mock>=3.10.0
 homeassistant>=2023.1.0
-aiohelvar @ git+https://github.com/Ro-Fo/aiohelvar@claude/helvarnet-timeout-errors-vl82t7
+aiohelvar @ git+https://github.com/Ro-Fo/aiohelvar@V0.9.9
 
