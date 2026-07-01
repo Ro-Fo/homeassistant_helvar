@@ -70,6 +70,28 @@ python3 tools/helvar_diagnose.py 127.0.0.1
 Send the mock `kill -HUP <pid>` (it prints its PID on start) to flip it between
 `modern` and `legacy` behaviour while it runs.
 
+## Cluster / router IDs, ports & firmware
+
+Grounded in Helvar's own documentation (Designer 5 Quick Start Guide §3.4 and
+the Designer Release Notes):
+
+* **Ports:** the HelvarNet API/TCP port is **50000** (the integration default).
+  Don't confuse it with **60005**, which is the inter-router *cluster comms*
+  port - pointing the integration at 60005 won't work.
+* **Cluster/router from IP:** Helvar derives the HelvarNet `@cluster.router`
+  address from the router's IP using the *cluster mask*. With the default mask
+  `255.255.255.0` and the usual `10.254.C.R` layout, cluster = 3rd octet and
+  router = 4th octet - which is what the integration assumes. If your router is
+  reached on an unrelated network (for example via a bridge on a `192.168.x.y`
+  address), that assumption is wrong and device discovery targets the wrong
+  address. The report prints the probe address so a mismatch is visible; set the
+  real ids with `--cluster` / `--router`.
+* **Firmware/models:** the 9xx routers (905/910/920) and the newer, Linux-based
+  950 run firmware in the 5.5.x-5.8.x range. Older firmware may not implement
+  newer HelvarNet queries and answers them with error 15. Helvar also recommends
+  setting the router's IP *broadcast* address correctly for reliable HelvarNet
+  behaviour (relevant on VLANs).
+
 ## Notes
 
 * The tool works with any installed `aiohelvar` version, and even if it isn't

@@ -123,6 +123,13 @@ def derive_cluster_router(host: str) -> Tuple[int, int]:
     here so the device-discovery probe uses the *same* address the integration
     would, which also makes an address mismatch visible in the report. Falls
     back to (0, 1) for hostnames or non-IPv4 inputs.
+
+    Per the Designer 5 Quick Start Guide (section 3.4), this 3rd/4th-octet split
+    only holds for the Helvar default cluster mask 255.255.255.0 with the usual
+    10.254.C.R layout. If the router is reached on an unrelated network (e.g.
+    via a bridge on 192.168.x.y), the derived ids will be wrong - pass
+    --cluster/--router explicitly. (The HelvarNet port is 50000; 60005 is the
+    separate inter-router "cluster comms" port, not this one.)
     """
     try:
         ip = ipaddress.ip_address(host)
@@ -411,8 +418,19 @@ def _parse_args(argv=None) -> argparse.Namespace:
     parser.add_argument(
         "-t", "--timeout", type=float, default=DEFAULT_TIMEOUT, help="per-query timeout in seconds"
     )
-    parser.add_argument("--cluster", type=int, default=None, help="override cluster id for the discovery probe")
-    parser.add_argument("--router", type=int, default=None, help="override router id for the discovery probe")
+    parser.add_argument(
+        "--cluster",
+        type=int,
+        default=None,
+        help="cluster id for the discovery probe (default: 3rd IP octet; set this "
+        "if the router isn't on a standard 10.254.C.R / 255.255.255.0 network)",
+    )
+    parser.add_argument(
+        "--router",
+        type=int,
+        default=None,
+        help="router id for the discovery probe (default: 4th IP octet)",
+    )
     parser.add_argument("--json", action="store_true", help="print the report as JSON")
     return parser.parse_args(argv)
 
