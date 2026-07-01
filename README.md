@@ -42,6 +42,31 @@ Many! But the following are probably the most significant:
   - I'm sure there are bugs. 
 
 
+## Diagnostics & Troubleshooting
+
+If the integration won't connect, appears to hang while being added, or finds no
+devices, run the read-only diagnostics tool on the machine hosting Home
+Assistant **before** digging through logs:
+
+```bash
+python3 tools/helvar_diagnose.py <your-router-ip>
+```
+
+It checks in a few seconds whether the router is reachable and whether its
+firmware supports the queries the integration needs, then prints a clear
+verdict. It only sends read-only queries and needs nothing but the router's
+address. A common result on older routers is:
+
+```
+Device discovery    : ERROR   -> error 15: Invalid message command
+Verdict: WARNING - Router reachable, but device discovery (query C:100) is not
+supported by this firmware ...
+```
+
+which means the router firmware is too old to enumerate devices over HelvarNet.
+See [`tools/README.md`](tools/README.md) for full usage, including how to test
+against a mock router (no hardware required).
+
 ## Help
 
 I don't really like the Home Assistant select card scene integration - perhaps we need a custom one. Or integration with the HomeAssistant scenes setup. Not sure.
