@@ -1,0 +1,89 @@
+recall_scene:
+  name: Recall scene
+  description: >-
+    Recall a Helvar scene in a group (HelvarNet C:11). Devices whose scene
+    table stores "*" (ignore scene command) for the scene are left untouched
+    by the router.
+  fields:
+    group:
+      name: Group
+      description: The Helvar group id.
+      required: true
+      example: 1
+      selector:
+        number:
+          min: 0
+          max: 65535
+          mode: box
+    block:
+      name: Block
+      description: The scene block within the group.
+      required: false
+      default: 1
+      example: 1
+      selector:
+        number:
+          min: 1
+          max: 8
+          mode: box
+    scene:
+      name: Scene
+      description: The scene number within the block (1-16).
+      required: true
+      example: 7
+      selector:
+        number:
+          min: 1
+          max: 16
+          mode: box
+    fade:
+      name: Fade time
+      description: Fade time in HelvarNet units of 1/100 s (50 = 0.5 s).
+      required: false
+      default: 50
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 65535
+          mode: box
+
+set_group_level:
+  name: Set group level
+  description: >-
+    Force every channel in a Helvar group directly to a level (HelvarNet
+    C:13). Unlike a scene recall, this also drives channels whose scene table
+    stores "*" (ignore scene command) - e.g. level 0 reliably switches the
+    whole group off.
+  fields:
+    group:
+      name: Group
+      description: The Helvar group id.
+      required: true
+      example: 1
+      selector:
+        number:
+          min: 0
+          max: 65535
+          mode: box
+    level:
+      name: Level
+      description: Target level in percent (0-100).
+      required: true
+      example: 75
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+    fade:
+      name: Fade time
+      description: Fade time in HelvarNet units of 1/100 s (50 = 0.5 s).
+      required: false
+      default: 50
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 65535
+          mode: box

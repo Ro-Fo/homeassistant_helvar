@@ -4,13 +4,10 @@
   "codeowners": ["@tomplayford"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/tomplayford/homeassistant_helvar",
-  "issue_tracker": "https://github.com/tomplayford/homeassistant_helvar/issues",
-  "homekit": {},
+  "documentation": "https://github.com/Ro-Fo/homeassistant_helvar",
+  "issue_tracker": "https://github.com/Ro-Fo/homeassistant_helvar/issues",
   "iot_class": "local_push",
   "loggers": ["aiohelvar"],
-  "requirements": ["aiohelvar==0.9.8"],
-  "ssdp": [],
-  "version": "0.2.3", 
-  "zeroconf": []
+  "requirements": ["aiohelvar @ https://github.com/Ro-Fo/aiohelvar/archive/refs/tags/v0.11.0.tar.gz"],
+  "version": "0.3.0"
 }
