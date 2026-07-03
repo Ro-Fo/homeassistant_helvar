@@ -6,16 +6,33 @@
         "error": {
             "cannot_connect": "Failed to connect",
             "invalid_auth": "Invalid authentication",
+            "cluster_router_pair": "Set both cluster id and router id, or leave both empty for auto-discovery",
             "unknown": "Unexpected error"
         },
         "step": {
             "user": {
                 "data": {
                     "host": "Host",
-                    "password": "Password",
-                    "username": "Username"
+                    "port": "Port",
+                    "cluster_id": "Cluster id (advanced, leave empty to auto-discover)",
+                    "router_id": "Router id (advanced, leave empty to auto-discover)"
                 }
             }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "title": "Helvar scene options",
+                "description": "Scene display names: one per line as `group.block.scene = Friendly name` (e.g. `1.1.3 = Dinner`). Off scenes: one per line as `group = block.scene` (e.g. `1 = 1.15`); groups without an entry are switched off with a direct level of 0.",
+                "data": {
+                    "scene_names": "Scene display names",
+                    "off_scenes": "Off scene per group"
+                }
+            }
+        },
+        "error": {
+            "invalid_options": "One or more lines could not be parsed - see the log for details"
         }
     },
     "title": "HelvarNet"

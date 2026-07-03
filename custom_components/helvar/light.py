@@ -83,6 +83,16 @@ class HelvarLight(LightEntity):
         return self.device.name
 
     @property
+    def available(self):
+        """The light is controllable while the router connection is up.
+
+        aiohelvar keeps the TCP session alive and reconnects on its own; the
+        entity objects survive reconnects and just report unavailable while
+        the link is down.
+        """
+        return bool(self.router.api and self.router.api.connected)
+
+    @property
     def brightness(self):
         """Return the brightness of the light.
 
