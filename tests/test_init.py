@@ -87,3 +87,26 @@ class TestHelvarInit:
             
             # Verify data was cleaned up on failure
             assert mock_hass.data[HELVAR_DOMAIN][mock_config_entry.entry_id] is None
+    @pytest.mark.asyncio
+    async def test_async_setup_entry_retries_on_command_timeout(self, mock_hass, mock_config_entry):
+        """A router that connects but stops answering must raise ConfigEntryNotReady."""
+        from aiohelvar.exceptions import CommandResponseTimeout
+        from homeassistant.exceptions import ConfigEntryNotReady
+
+        mock_config_entry.data = {"host": "192.168.1.100", "port": 50000}
+        mock_hass.data = {HELVAR_DOMAIN: {}}
+
+        with patch('custom_components.helvar.router.aiohelvar.Router') as mock_aio_router:
+            mock_router_instance = Mock()
+            mock_router_instance.connect = AsyncMock()
+            mock_router_instance.initialize = AsyncMock(
+                side_effect=CommandResponseTimeout(">V:2,C:164,G:1#")
+            )
+            mock_router_instance.disconnect = AsyncMock()
+            mock_aio_router.return_value = mock_router_instance
+
+            with pytest.raises(ConfigEntryNotReady):
+                await async_setup_entry(mock_hass, mock_config_entry)
+
+            # The half-open connection is torn down so the retry starts clean.
+            mock_router_instance.disconnect.assert_called_once()

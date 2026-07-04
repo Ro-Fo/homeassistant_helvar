@@ -8,6 +8,6 @@
   "issue_tracker": "https://github.com/Ro-Fo/homeassistant_helvar/issues",
   "iot_class": "local_push",
   "loggers": ["aiohelvar"],
-  "requirements": ["aiohelvar @ https://github.com/Ro-Fo/aiohelvar/archive/refs/tags/v0.11.0.tar.gz"],
-  "version": "0.3.0"
+  "requirements": ["aiohelvar @ https://github.com/Ro-Fo/aiohelvar/archive/refs/tags/v0.11.1.tar.gz"],
+  "version": "0.3.1"
 }

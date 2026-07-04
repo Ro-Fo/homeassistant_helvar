@@ -3,6 +3,7 @@ import asyncio
 import logging
 
 import aiohelvar
+from aiohelvar.exceptions import CommandResponseTimeout
 
 from homeassistant.exceptions import ConfigEntryNotReady
 
@@ -71,11 +72,23 @@ class HelvarRouter:
             await router.connect()
             await router.initialize()
 
-        except (ConnectionError, OSError, asyncio.TimeoutError) as err:
-            # Router unreachable right now (e.g. HA restarted before the
-            # network is up, or the router is rebooting). Raising
+        except (
+            ConnectionError,
+            OSError,
+            asyncio.TimeoutError,
+            CommandResponseTimeout,
+        ) as err:
+            # Router unreachable or not answering right now (e.g. HA
+            # restarted before the network is up, the router is rebooting,
+            # or it is too busy to answer a start-up query in time). Raising
             # ConfigEntryNotReady makes HA retry the setup with backoff.
-            _LOGGER.error("Error connecting to the Helvar router at %s", host)
+            _LOGGER.error(
+                "Error connecting to the Helvar router at %s: %r", host, err
+            )
+            try:
+                await router.disconnect()
+            except Exception:  # pylint: disable=broad-except
+                _LOGGER.debug("Error disconnecting after failed setup", exc_info=True)
             raise ConfigEntryNotReady from err
 
         except Exception:  # pylint: disable=broad-except
